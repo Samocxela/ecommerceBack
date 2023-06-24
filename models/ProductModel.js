@@ -1,10 +1,10 @@
-import { client } from "../database/db.js";
+import { pool } from "../database/db.js";
 
 const ProductModel = {
   getAllProducts: async () => {
     try {
       const query = 'SELECT * FROM productos';
-      const result = await client.query(query);
+      const result = await pool.query(query);
       return result.rows;
     } catch (error) {
       throw new Error(error.message);
@@ -15,7 +15,7 @@ const ProductModel = {
     try {
       const query = 'SELECT * FROM productos WHERE id = $1';
       const values = [id];
-      const result = await client.query(query, values);
+      const result = await pool.query(query, values);
       return result.rows[0];
     } catch (error) {
       throw new Error(error.message);
@@ -27,7 +27,7 @@ const ProductModel = {
       const { nombre, descripcion, precio, stock, stockmax, stockmin, img } = product;
       const query = 'INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img) VALUES ($1, $2, $3, $4, $5, $6, $7)';
       const values = [nombre, descripcion, precio, stock, stockmax, stockmin, img];
-      await client.query(query, values);
+      await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -38,7 +38,7 @@ const ProductModel = {
       const { nombre, descripcion, precio, stock, stockmax, stockmin, img } = product;
       const query = 'UPDATE productos SET nombre = $1, descripcion = $2, precio = $3, stock = $4, stockmax = $5, stockmin = $6, img = $7 WHERE id = $8';
       const values = [nombre, descripcion, precio, stock, stockmax, stockmin, img, id];
-      await client.query(query, values);
+      await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -48,7 +48,7 @@ const ProductModel = {
     try {
       const query = 'DELETE FROM productos WHERE id = $1';
       const values = [id];
-      await client.query(query, values);
+      await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -61,16 +61,16 @@ const ProductModel = {
       
       if (action === 'unbook') {
         const unbookQuery = 'UPDATE productos SET stock = stock + 1 WHERE id = $1';
-        await client.query(unbookQuery, values);
+        await pool.query(unbookQuery, values);
         return 'Unbooked';
       } else if (action === 'book') {
         const checkStockQuery = 'SELECT stock FROM productos WHERE id = $1';
-        const checkStockResult = await client.query(checkStockQuery, values);
+        const checkStockResult = await pool.query(checkStockQuery, values);
         const stock = checkStockResult.rows[0].stock;
         if (stock === 0) {
           return 'Stockout';
         }
-        await client.query(query, values);
+        await pool.query(query, values);
         return 'Booked';
       } else {
         throw new Error('Invalid action');
@@ -82,29 +82,30 @@ const ProductModel = {
   
   buyProducts: async (products) => {
     try {
-      await client.query('BEGIN');
+      await pool.query('BEGIN');
       const promises = products.map(async (product) => {
         const { id, quantity } = product;
         const updateContentQuery = 'UPDATE productos SET stock = stock - $1 WHERE id = $2';
         const values = [quantity, id];
-        await client.query(updateContentQuery, values);
+        await pool.query(updateContentQuery, values);
         const checkStockQuery = 'SELECT stockmin FROM productos WHERE id = $1';
-        const checkStockResult = await client.query(checkStockQuery, [id]);
+        const checkStockResult = await pool.query(checkStockQuery, [id]);
         const stockmin = checkStockResult.rows[0].stockmin;
         if (stockmin >= (stock - quantity)) {
           const sendMailQuery = 'SELECT * FROM usuarios WHERE stockmin >= $1';
-          const sendMailResult = await client.query(sendMailQuery, [id]);
+          const sendMailResult = await pool.query(sendMailQuery, [id]);
           // Lógica para enviar correo
         }
       });
       await Promise.all(promises);
-      await client.query('COMMIT');
+      await pool.query('COMMIT');
       return 'Successful purchase';
     } catch (error) {
-      await client.query('ROLLBACK');
+      await pool.query('ROLLBACK');
       throw new Error(error.message);
     }
   },
 };
 
 export default ProductModel;
+

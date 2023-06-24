@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
 
-//import dbConfig from "./database/db.js";
+import {pool} from "./database/db.js";
 import productRoutes from "./routes/routesProducts.js";
 import userRoutes from "./routes/routesUser.js";
 import pay from "./routes/pay.js";
-import pg from 'pg';
-const { Pool } = pg;
+
 
 const app = express();
 
@@ -33,9 +32,7 @@ app.use(userRoutes);
 app.use("/", pay);
 
 // Conexión a la base de datos
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL + "?sslmode=require",
-});
+
 
 pool.on("connect", () => {
   console.log("Conexión exitosa a la base de datos");
@@ -43,14 +40,14 @@ pool.on("connect", () => {
 
 // Obtiene todos los productos de la base de datos
 const getAllProducts = async () => {
-  const client = await pool.connect();
   try {
-    const result = await client.query("SELECT * FROM productos");
+    const result = await pool.query("SELECT * FROM productos");
     return result.rows;
-  } finally {
-    client.release();
+  } catch (error) {
+    throw error;
   }
 };
+
 
 const productsStock = {}; // Objeto para guardar el stock de los productos
 const productMinStock = {}; // Objeto para guardar el stock mínimo de los productos
