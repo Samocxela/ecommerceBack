@@ -12,7 +12,8 @@ export const getAllUsers = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const { nombre, password, direccion, telefono, email } = req.body;
-    await UserModel.createUser(nombre, password, direccion, telefono, email);
+    console.log(req.body)
+    await UserModel.createUser(req.body);
     res.json({ message: 'Registro creado' });
   } catch (error) {
     res.json({ message: error.message });
