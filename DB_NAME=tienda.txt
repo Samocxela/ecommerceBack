@@ -1,0 +1,21 @@
+DB_NAME="tienda"
+DB_USER="postgres"
+DB_PASSWORD="850318"
+DB_HOST="localhost"
+
+POSTGRES_URL="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com:5432/verceldb"
+POSTGRES_PRISMA_URL="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com:5432/verceldb?pgbouncer=true&connect_timeout=15"
+POSTGRES_URL_NON_POOLING="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930.us-east-2.postgres.vercel-storage.com:5432/verceldb"
+POSTGRES_USER="default"
+POSTGRES_HOST="ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com"
+POSTGRES_PASSWORD="DrP5TwHLF4Kz"
+POSTGRES_DATABASE="verceldb"
+
+import Sequelize from 'sequelize';
+
+const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
+    dialect: 'postgres'
+});
+
+export default db;
