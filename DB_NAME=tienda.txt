@@ -3,6 +3,7 @@ DB_USER="postgres"
 DB_PASSWORD="850318"
 DB_HOST="localhost"
 
+vercel
 POSTGRES_URL="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com:5432/verceldb"
 POSTGRES_PRISMA_URL="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com:5432/verceldb?pgbouncer=true&connect_timeout=15"
 POSTGRES_URL_NON_POOLING="postgres://default:DrP5TwHLF4Kz@ep-sparkling-feather-192930.us-east-2.postgres.vercel-storage.com:5432/verceldb"
@@ -10,6 +11,14 @@ POSTGRES_USER="default"
 POSTGRES_HOST="ep-sparkling-feather-192930-pooler.us-east-2.postgres.vercel-storage.com"
 POSTGRES_PASSWORD="DrP5TwHLF4Kz"
 POSTGRES_DATABASE="verceldb"
+
+railway
+DATABASE_URL="postgresql://postgres:5vTNwqRhJbvA05OyUNkI@containers-us-west-21.railway.app:7078/railway"
+PGDATABASE="railway"
+PGHOST="containers-us-west-21.railway.app"
+PGPASSWORD="5vTNwqRhJbvA05OyUNkI"
+PGPORT="7078"
+PGUSER="postgres"
 
 import Sequelize from 'sequelize';
 
@@ -19,3 +28,66 @@ const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.D
 });
 
 export default db;
+
+CREATE TABLE usuarios (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  direccion VARCHAR(255),
+  telefono VARCHAR(255),
+  email VARCHAR(255) NOT NULL
+);
+
+-- Creación de la tabla "productos"
+CREATE TABLE productos (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion TEXT,
+  precio NUMERIC(10, 2) NOT NULL,
+  stock INTEGER NOT NULL,
+  stockmax INTEGER NOT NULL,
+  stockmin INTEGER NOT NULL,
+  img VARCHAR(255),
+  usuario_id INTEGER REFERENCES usuarios(id)
+);
+
+INSERT INTO usuarios (nombre, password, direccion, telefono, email)
+VALUES ('admin', 'password123', 'Dirección 1', '123456789', 'admin@example.com');
+
+INSERT INTO usuarios (nombre, password, direccion, telefono, email)
+VALUES ('usuario1', 'password123', 'Dirección 2', '987654321', 'usuario1@example.com');
+
+INSERT INTO usuarios (nombre, password, direccion, telefono, email)
+VALUES ('usuario2', 'password123', 'Dirección 3', '456789123', 'usuario2@example.com');
+
+
+-- Insertar productos de vestir
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Camisa', 'Camisa de manga larga', 29.99, 50, 100, 10, 'camisa.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Pantalón', 'Pantalón de mezclilla', 39.99, 30, 50, 5, 'pantalon.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Vestido', 'Vestido elegante', 59.99, 20, 30, 3, 'vestido.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Blusa', 'Blusa estampada', 24.99, 40, 60, 8, 'blusa.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Chaqueta', 'Chaqueta de cuero', 79.99, 15, 20, 2, 'chaqueta.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Falda', 'Falda plisada', 34.99, 25, 40, 5, 'falda.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Suéter', 'Suéter de lana', 44.99, 35, 50, 5, 'sueter.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Zapatos', 'Zapatos de tacón', 69.99, 10, 15, 2, 'zapatos.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Bufanda', 'Bufanda de punto', 19.99, 50, 80, 10, 'bufanda.jpg');
+
+INSERT INTO productos (nombre, descripcion, precio, stock, stockmax, stockmin, img)
+VALUES ('Sombrero', 'Sombrero de paja', 14.99, 20, 30, 5, 'sombrero.jpg');
