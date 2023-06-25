@@ -63,7 +63,7 @@ getAllProducts()
     });
 
     console.log(productMinStock);
-
+   
     // Iniciar el servidor
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
@@ -73,3 +73,4 @@ getAllProducts()
   .catch((error) => {
     console.log(`Error al obtener los productos: ${error}`);
   });
+  export { productsStock, productMinStock };// cambio se exporta el stock y el productominstock

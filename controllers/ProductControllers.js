@@ -40,8 +40,8 @@ export const createProduct = async (req, res) => {
 export const updateProducts = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { nombre, descripcion, precio, stock, stockmax, stockmin, img } = req.body;
-    await ProductModel.updateProduct(productId, { nombre, descripcion, precio, stock, stockmax, stockmin, img });
+    const { precio, stock, stockmax, stockmin } = req.body;
+    await ProductModel.updateProduct(productId, { precio, stock, stockmax, stockmin });
     res.json({ message: 'Producto actualizado exitosamente' });
   } catch (error) {
     res.json({ message: error.message });
@@ -69,7 +69,7 @@ export const buyProducts = async (req, res) => {
   }
 };
 // Reservar o cancelar la reserva de un producto
-export const bookProduct = async (req, res) => {
+/*export const bookProduct = async (req, res) => {
   try {
     const productId = req.params.id;
     const action = req.query.f; // 'book' para reservar, 'unbook' para cancelar la reserva
@@ -85,5 +85,20 @@ export const bookProduct = async (req, res) => {
   } catch (error) {
     res.json({ message: error.message });
   }
-};
-
+};*/
+export const bookProduct = async (req, res) => {
+  try {
+      console.log(productsStock);
+      if (req.query.f === 'unbook'){
+          productsStock[req.params.id]++;
+          return res.json('Unbooked');
+      } else if (req.query.f === 'book') {
+          if (productsStock[req.params.id] == 0) return res.json('Stockout')//en caso de que el producto sea igual a 0 se notifica que se acabo
+          productsStock[req.params.id]--;
+          return res.json('Booked');
+      } 
+      res.status(400).json('Bad request');
+  } catch (error) {
+      res.json({message: error.message});
+  }
+}

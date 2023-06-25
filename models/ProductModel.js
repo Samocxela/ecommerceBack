@@ -35,9 +35,9 @@ const ProductModel = {
   
   updateProduct: async (id, product) => {
     try {
-      const { nombre, descripcion, precio, stock, stockmax, stockmin, img } = product;
-      const query = 'UPDATE productos SET nombre = $1, descripcion = $2, precio = $3, stock = $4, stockmax = $5, stockmin = $6, img = $7 WHERE id = $8';
-      const values = [nombre, descripcion, precio, stock, stockmax, stockmin, img, id];
+      const { precio, stock, stockmax, stockmin } = product;
+      const query = 'UPDATE productos SET precio = $1, stock = $2, stockmax = $3, stockmin = $4 WHERE id = $5';
+      const values = [ precio, stock, stockmax, stockmin, id];
       await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);

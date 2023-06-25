@@ -39,10 +39,10 @@ const UserModel = {
 
   updateUser: async (id, user) => {
     try {
-      const { nombre, password, direccion, telefono, email } = user;
+      const { password, direccion, telefono, email } = user;
       const query =
-        "UPDATE usuarios SET nombre = $1, password = $2, direccion = $3, telefono = $4, email = $5 WHERE id = $6";
-      const values = [nombre, password, direccion, telefono, email, id];
+        "UPDATE usuarios SET password = $1, direccion = $2, telefono = $3, email = $4 WHERE id = $5";
+      const values = [ password, direccion, telefono, email, id];
       await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);

@@ -22,8 +22,8 @@ export const createUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { nombre, password, direccion, telefono, email } = req.body;
-    await UserModel.updateUser(req.params.id, nombre, password, direccion, telefono, email);
+    const { password, direccion, telefono, email } = req.body;
+    await UserModel.updateUser(req.params.id, password, direccion, telefono, email);
     res.json({ message: 'Registro actualizado' });
   } catch (error) {
     res.json({ message: error.message });
