@@ -1,11 +1,10 @@
 import express from "express";
 import cors from "cors";
 
-import {pool} from "./database/db.js";
+import { pool } from "./database/db.js";
 import productRoutes from "./routes/routesProducts.js";
 import userRoutes from "./routes/routesUser.js";
 import pay from "./routes/pay.js";
-
 
 const app = express();
 
@@ -32,8 +31,6 @@ app.use(userRoutes);
 app.use("/", pay);
 
 // Conexión a la base de datos
-
-
 pool.on("connect", () => {
   console.log("Conexión exitosa a la base de datos");
 });
@@ -47,7 +44,6 @@ const getAllProducts = async () => {
     throw error;
   }
 };
-
 
 const productsStock = {}; // Objeto para guardar el stock de los productos
 const productMinStock = {}; // Objeto para guardar el stock mínimo de los productos
@@ -63,7 +59,7 @@ getAllProducts()
     });
 
     console.log(productMinStock);
-   
+
     // Iniciar el servidor
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
@@ -73,4 +69,6 @@ getAllProducts()
   .catch((error) => {
     console.log(`Error al obtener los productos: ${error}`);
   });
-  export { productsStock, productMinStock };// cambio se exporta el stock y el productominstock
+
+export { productsStock, productMinStock };
+// cambio se exporta el stock y el productominstock
