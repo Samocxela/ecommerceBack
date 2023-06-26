@@ -20,6 +20,14 @@ app.use(
 app.use(express.json());
 
 app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "connect-src 'self' https://r.stripe.com https://api.trongrid.io"
+  );
+  next();
+});
+
+app.use((req, res, next) => {
   const now = new Date();
   const time = now.toLocaleTimeString();
   console.log(`${time} --- New request ${req.method}, on path ${req.path}`);
