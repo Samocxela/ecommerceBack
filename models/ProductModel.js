@@ -43,6 +43,26 @@ const ProductModel = {
       throw new Error(error.message);
     }
   },
+
+  addToCart: async (productId, quantity) => {
+    try {
+      const query = 'UPDATE productos SET stock = stock - $1 WHERE id = $2';
+      const values = [quantity, productId];
+      await pool.query(query, values);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
+  removeFromCart: async (productId, quantity) => {
+    try {
+      const query = 'UPDATE productos SET stock = stock + $1 WHERE id = $2';
+      const values = [quantity, productId];
+      await pool.query(query, values);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
   
   deleteProduct: async (id) => {
     try {
@@ -54,11 +74,11 @@ const ProductModel = {
     }
   },
   
-  bookProduct: async (id, action) => {
+  bookProduct:async (id, action) => {
     try {
       const query = 'UPDATE productos SET stock = stock - 1 WHERE id = $1';
       const values = [id];
-      
+      console.log(id,action)
       if (action === 'unbook') {
         const unbookQuery = 'UPDATE productos SET stock = stock + 1 WHERE id = $1';
         await pool.query(unbookQuery, values);
