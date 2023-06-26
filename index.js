@@ -18,7 +18,7 @@ app.use(
   })
 );
 app.use(express.json());
-
+//Configurar CSP permitiendo la conexión a https://api.trongrid.io
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
