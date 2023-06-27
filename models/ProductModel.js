@@ -1,6 +1,7 @@
 import { pool } from "../database/db.js";
 
 const ProductModel = {
+  // Obtener todos los productos
   getAllProducts: async () => {
     try {
       const query = 'SELECT * FROM productos';
@@ -11,6 +12,7 @@ const ProductModel = {
     }
   },
   
+  // Obtener un producto por su ID
   getProduct: async (id) => {
     try {
       const query = 'SELECT * FROM productos WHERE id = $1';
@@ -22,6 +24,7 @@ const ProductModel = {
     }
   },
   
+  // Crear un nuevo producto
   createProduct: async (product) => {
     try {
       const { nombre, descripcion, precio, stock, stockmax, stockmin, img } = product;
@@ -33,17 +36,19 @@ const ProductModel = {
     }
   },
   
+  // Actualizar un producto por su ID
   updateProduct: async (id, product) => {
     try {
       const { precio, stock, stockmax, stockmin } = product;
       const query = 'UPDATE productos SET precio = $1, stock = $2, stockmax = $3, stockmin = $4 WHERE id = $5';
-      const values = [ precio, stock, stockmax, stockmin, id];
+      const values = [precio, stock, stockmax, stockmin, id];
       await pool.query(query, values);
     } catch (error) {
       throw new Error(error.message);
     }
   },
 
+  // Agregar un producto al carrito (actualizar el stock)
   addToCart: async (productId, quantity) => {
     try {
       const query = 'UPDATE productos SET stock = stock - $1 WHERE id = $2';
@@ -54,6 +59,7 @@ const ProductModel = {
     }
   },
 
+  // Remover un producto del carrito (actualizar el stock)
   removeFromCart: async (productId, quantity) => {
     try {
       const query = 'UPDATE productos SET stock = stock + $1 WHERE id = $2';
@@ -64,6 +70,7 @@ const ProductModel = {
     }
   },
   
+  // Eliminar un producto por su ID
   deleteProduct: async (id) => {
     try {
       const query = 'DELETE FROM productos WHERE id = $1';
@@ -74,11 +81,12 @@ const ProductModel = {
     }
   },
   
-  bookProduct:async (id, action) => {
+  // Reservar o liberar la reserva de un producto
+  bookProduct: async (id, action) => {
     try {
       const query = 'UPDATE productos SET stock = stock - 1 WHERE id = $1';
       const values = [id];
-      console.log(id,action)
+      console.log(id, action);
       if (action === 'unbook') {
         const unbookQuery = 'UPDATE productos SET stock = stock + 1 WHERE id = $1';
         await pool.query(unbookQuery, values);
@@ -100,6 +108,7 @@ const ProductModel = {
     }
   },
   
+  // Realizar la compra de varios productos a la vez
   buyProducts: async (products) => {
     try {
       await pool.query('BEGIN');
@@ -128,4 +137,5 @@ const ProductModel = {
 };
 
 export default ProductModel;
+
 

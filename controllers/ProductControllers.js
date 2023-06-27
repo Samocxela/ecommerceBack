@@ -58,6 +58,7 @@ export const deleteProduct = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+
 // Comprar productos
 export const buyProducts = async (req, res) => {
   try {
@@ -68,8 +69,9 @@ export const buyProducts = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+
 // Reservar o cancelar la reserva de un producto
-export const bookProduct = async (req, res) => {
+/*export const bookProduct = async (req, res) => {
   try {
     const productId = req.params.id;
     const action = req.query.f; // 'book' para reservar, 'unbook' para cancelar la reserva
@@ -85,11 +87,13 @@ export const bookProduct = async (req, res) => {
   } catch (error) {
     res.json({ message: error.message });
   }
-};
+};*/
+
 // Agregar un producto al carrito
 export const addToCart = async (req, res) => {
   try {
     const productId = req.params.id;
+    console.log("Este es el producto id"+productId)
     const quantity = req.body.quantity;
     const message = await ProductModel.addToCart(productId, quantity);
     res.json({ message });
@@ -102,13 +106,15 @@ export const addToCart = async (req, res) => {
 export const removeFromCart = async (req, res) => {
   try {
     const productId = req.params.id;
-    const message = await ProductModel.removeFromCart(productId);
+    const quantity = req.body.quantity;
+    const message = await ProductModel.removeFromCart(productId, quantity);
     res.json({ message });
   } catch (error) {
     res.json({ message: error.message });
   }
 };
-/*export const bookProduct = async (req, res) => {
+
+export const bookProduct = async (req, res) => {
   try {
       console.log(productsStock);
       if (req.query.f === 'unbook'){
@@ -123,4 +129,4 @@ export const removeFromCart = async (req, res) => {
   } catch (error) {
       res.json({message: error.message});
   }
-}*/
+}

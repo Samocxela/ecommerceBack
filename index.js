@@ -22,7 +22,8 @@ app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "connect-src 'self' https://r.stripe.com https://api.trongrid.io"
+    "connect-src 'self' https://r.stripe.com https://api.trongrid.io",
+    "Access-Control-Allow-Origin", 'http://localhost:3000'
   );
   next();
 });
