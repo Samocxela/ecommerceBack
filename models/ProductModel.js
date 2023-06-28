@@ -97,7 +97,7 @@ const ProductModel = {
   buyProducts: async (product) => {
     try {
       const { id, quantity } = product;
-  
+      console.log(product)
       // Verificar el stock disponible
       const checkStockQuery = 'SELECT stock FROM productos WHERE id = $1';
       const checkStockResult = await pool.query(checkStockQuery, [id]);
