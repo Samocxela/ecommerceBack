@@ -67,7 +67,7 @@ getAllProducts()
       };
     });
 
-    console.log(productMinStock);
+    //console.log(productMinStock);
 
     // Iniciar el servidor
     const PORT = process.env.PORT || 3000;

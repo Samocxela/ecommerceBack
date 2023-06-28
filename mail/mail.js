@@ -1,24 +1,26 @@
-import nodemailer from 'nodemailer'; //se improta la libreria nodemailer que permite el facil envio de correo
+import nodemailer from 'nodemailer';
 
-//El transportador, simplemente una en la cual SMTP protocolo simple de transferencia de correo
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    auth: {
-        user: 'p.ecommercedlt@gmail.com',
-        pass: 'uxudsmblsczaqywk'
-    }
+  host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+    user: 'p.ecommercedlt@gmail.com',
+    pass: 'uxudsmblsczaqywk'
+  }
 });
 
-//funcion que envia el correo con el contenido usando la libreria de mailer
-
-export const sendMail = prod => {
-    transporter.sendMail({
-        from: "p.ecommercedlt@gmail.com",
-        to: "alexander.guerrero@yahoo.com",
-        subject: "Stock minimo",
-        text: `El siguiente producto con Id ${prod.id}. esta casi vacio favor actualizar inventario`
-    }).then(console.info)
-    .catch(console.catch)
-}
+export const sendMail = (product) => {
+  transporter.sendMail({
+    from: 'p.ecommercedlt@gmail.com',
+    to: 'alexander.guerrero@yahoo.com',
+    subject: 'Stock mínimo',
+    text: `El producto con ID ${product.id} tiene un stock bajo. Por favor, actualiza el inventario.`
+  })
+    .then(() => {
+      console.log('Correo electrónico enviado exitosamente.');
+    })
+    .catch((error) => {
+      console.error('Error al enviar el correo electrónico:', error);
+    });
+};
 

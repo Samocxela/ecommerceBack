@@ -62,39 +62,35 @@ export const deleteProduct = async (req, res) => {
 // Comprar productos
 export const buyProducts = async (req, res) => {
   try {
+    if (typeof req.body !== 'object') {
+      throw new Error('Invalid request body');
+    }
+
+    console.log("llego ")
     const products = req.body;
+
+    console.log(req.body)
     const message = await ProductModel.buyProducts(products);
     res.json({ message: message });
+
   } catch (error) {
     res.json({ message: error.message });
   }
 };
 
-// Reservar o cancelar la reserva de un producto
-/*export const bookProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const action = req.query.f; // 'book' para reservar, 'unbook' para cancelar la reserva
-    let message;
-    if (action === 'book') {
-      message = await ProductModel.bookProduct(productId, 'book');
-    } else if (action === 'unbook') {
-      message = await ProductModel.bookProduct(productId, 'unbook');
-    } else {
-      throw new Error('Acción no válida');
-    }
-    res.json({ message });
-  } catch (error) {
-    res.json({ message: error.message });
-  }
-};*/
-
 // Agregar un producto al carrito
 export const addToCart = async (req, res) => {
   try {
+
+    console.log(req.params.id)
+    console.log(req.body.quantity)
+
     const productId = req.params.id;
     console.log("Este es el producto id"+productId)
     const quantity = req.body.quantity;
+
+    
+
     const message = await ProductModel.addToCart(productId, quantity);
     res.json({ message });
   } catch (error) {
